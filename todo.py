@@ -2,9 +2,14 @@ class TodoApp:
     def __init__(self):
         self.tasks = []
 
-    def add_task(self, task):
-        self.tasks.append({"task": task, "completed": False})
-        print(f"Task '{task}' added!")
+    # Add a new priority feature for tasks when adding them
+    def add_task(self, task, priority="Medium"):
+        self.tasks.append({
+        "task": task,
+        "priority": priority,
+        "completed": False
+        })
+        print(f"Task '{task}' added with priority '{priority}'!")
 
     def remove_task(self, task_index):
         try:
@@ -20,13 +25,14 @@ class TodoApp:
         except IndexError:
             print("Invalid task index.")
 
+    # Updated view to show priority and completion status
     def view_tasks(self):
         if not self.tasks:
             print("No tasks to show.")
         else:
             for idx, task in enumerate(self.tasks):
                 status = "Completed" if task["completed"] else "Not Completed"
-                print(f"{idx}. {task['task']} - {status}")
+                print(f"{idx}. {task['task']} - {task['priority']} - {status}")
 
 
 def main():
@@ -41,9 +47,11 @@ def main():
         print("5. Exit")
         choice = input("Choose an option: ")
 
+        # updated to handle priority when adding tasks
         if choice == '1':
             task = input("Enter task: ")
-            todo_app.add_task(task)
+            priority = input("Enter priority (High/Medium/Low): ").capitalize()
+            todo_app.add_task(task, priority)    
         elif choice == '2':
             todo_app.view_tasks()
             try:
