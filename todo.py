@@ -1,5 +1,9 @@
+import json
+import os
+
 class TodoApp:
-    def __init__(self):
+    def __init__(self, filename="tasks.json"):
+        self.filename = filename
         self.tasks = []
 
     # Add a new priority feature for tasks when adding them
@@ -34,6 +38,11 @@ class TodoApp:
                 status = "Completed" if task["completed"] else "Not Completed"
                 print(f"{idx}. {task['task']} - {task['priority']} - {status}")
 
+    def load_tasks(self):
+        if os.path.exists(self.filename):
+            with open(self.filename, "r") as f:
+                self.tasks = json.load(f)
+            print(f"Loaded {len(self.tasks)} task(s) from {self.filename}")
 
 def main():
     todo_app = TodoApp()
@@ -69,6 +78,8 @@ def main():
         elif choice == '4':
             todo_app.view_tasks()
         elif choice == '5':
+            # Save on exit
+            todo_app.save_tasks()  
             print("Goodbye!")
             break
         else:
