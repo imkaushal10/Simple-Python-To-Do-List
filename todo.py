@@ -79,7 +79,6 @@ def main():
         elif choice == '4':
             todo_app.view_tasks()
         elif choice == '5':
-            todo_app.save_tasks()  # Save on exit
             # Save on exit
             todo_app.save_tasks()  
             print("Goodbye!")
