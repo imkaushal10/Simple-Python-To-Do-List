@@ -34,7 +34,7 @@ class TodoApp:
                 status = "Completed" if task["completed"] else "Not Completed"
                 print(f"{idx}. {task['task']} - {status} - Priority: {task['priority']}")
     
-    #json save and load functions when exit and start the app
+    # Save tasks to a JSON file
     def save_tasks(self):
         with open(self.filename, "w") as f:
             json.dump(self.tasks, f, indent=4)
@@ -79,7 +79,8 @@ def main():
         elif choice == '4':
             todo_app.view_tasks()
         elif choice == '5':
-            todo_app.save_tasks()  # Save on exit
+            # Save on exit
+            todo_app.save_tasks()  
             print("Goodbye!")
             break
         else:
