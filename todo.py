@@ -1,5 +1,6 @@
 import json
 import os
+from tabulate import tabulate  # for formatted table display
 
 class TodoApp:
     def __init__(self, filename="tasks.json"):
@@ -26,13 +27,19 @@ class TodoApp:
         except IndexError:
             print("Invalid task index.")
 
+    # View tasks with formatted table display
     def view_tasks(self):
         if not self.tasks:
-            print("No tasks to show.")
-        else:
-            for idx, task in enumerate(self.tasks):
-                status = "Completed" if task["completed"] else "Not Completed"
-                print(f"{idx}. {task['task']} - {status} - Priority: {task['priority']}")
+            print("\nNo tasks to show.\n")
+            return
+
+        table = []
+        for idx, task in enumerate(self.tasks):
+            status = "✔ Completed" if task["completed"] else "✘ Not Completed"
+            table.append([idx, task['task'], task['priority'], status])
+
+        print("\n------- Your Tasks -------")
+        print(tabulate(table, headers=["Index", "Task", "Priority", "Status"], tablefmt="grid"))
 
     # Save tasks to a JSON file
     def save_tasks(self):
