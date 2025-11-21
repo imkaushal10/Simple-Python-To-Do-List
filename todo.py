@@ -1,15 +1,16 @@
-class TodoApp:
-    def __init__(self):
-        self.tasks = []
+import json
+import os
 
-    # Add a new priority feature for tasks when adding them
+class TodoApp:
+    def __init__(self, filename="tasks.json"):
+        self.filename = filename
+        self.tasks = []
+        self.load_tasks()  # Load tasks on start
+
+    # Setting priority when adding a task
     def add_task(self, task, priority="Medium"):
-        self.tasks.append({
-        "task": task,
-        "priority": priority,
-        "completed": False
-        })
-        print(f"Task '{task}' added with priority '{priority}'!")
+        self.tasks.append({"task": task, "completed": False, "priority": priority})
+        print(f"Task '{task}' with priority '{priority}' added!")
 
     def remove_task(self, task_index):
         try:
@@ -25,15 +26,25 @@ class TodoApp:
         except IndexError:
             print("Invalid task index.")
 
-    # Updated view to show priority and completion status
     def view_tasks(self):
         if not self.tasks:
             print("No tasks to show.")
         else:
             for idx, task in enumerate(self.tasks):
                 status = "Completed" if task["completed"] else "Not Completed"
-                print(f"{idx}. {task['task']} - {task['priority']} - {status}")
+                print(f"{idx}. {task['task']} - {status} - Priority: {task['priority']}")
 
+    # Save tasks to a JSON file
+    def save_tasks(self):
+        with open(self.filename, "w") as f:
+            json.dump(self.tasks, f, indent=4)
+        print("Tasks saved!")
+
+    def load_tasks(self):
+        if os.path.exists(self.filename):
+            with open(self.filename, "r") as f:
+                self.tasks = json.load(f)
+            print(f"Loaded {len(self.tasks)} task(s) from {self.filename}")
 
 def main():
     todo_app = TodoApp()
@@ -47,11 +58,10 @@ def main():
         print("5. Exit")
         choice = input("Choose an option: ")
 
-        # updated to handle priority when adding tasks
         if choice == '1':
             task = input("Enter task: ")
-            priority = input("Enter priority (High/Medium/Low): ").capitalize()
-            todo_app.add_task(task, priority)    
+            priority = input("Enter priority (High/Medium/Low): ")  # New priority input
+            todo_app.add_task(task, priority)
         elif choice == '2':
             todo_app.view_tasks()
             try:
@@ -69,6 +79,7 @@ def main():
         elif choice == '4':
             todo_app.view_tasks()
         elif choice == '5':
+            todo_app.save_tasks()  # Save on exit
             print("Goodbye!")
             break
         else:
